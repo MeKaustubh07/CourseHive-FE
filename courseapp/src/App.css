@@ -1,0 +1,187 @@
+/* =========================
+   Global Reset & Base Styles
+   ========================= */
+   .legacy * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .legacy .body, 
+  .legacy .html {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+  
+  /* =========================
+     Topbar (Global)
+     ========================= */
+  .legacy .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    color: black;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1000;
+  }
+  
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
+  
+  .middle-section {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    transform: translateX(-300px);
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Logo */
+  .logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 7px;
+  }
+  
+  /* Nav Links */
+  .link {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000;
+  }
+  
+  /* Login Button */
+  .login-btn {
+    margin-left: 15px;
+    padding: 6px 12px;
+    background-color: #F5F5F5;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+  }
+  .login-btn:hover {
+    background-color: #EDEDED;
+  }
+  
+  /* Phone Icon */
+  .right-section .phone-icon {
+    color: black !important;
+    margin-top: 3px;
+    cursor: pointer !important;
+    transition: color 0.2s ease-in-out;
+  }
+  .right-section .phone-icon:hover {
+    color: red !important;
+  }
+  
+  /* =========================
+     Auth Pages (Login / Signup)
+     ========================= */
+  .auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f7;
+  }
+  
+  .auth-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    width: 350px;
+    text-align: center;
+  }
+  
+  .auth-box h2 {
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #1d1d1f;
+  }
+  
+  .auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .auth-box input:focus {
+    border-color: #0071e3;
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.2);
+    outline: none;
+  }
+  
+  .auth-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .auth-box button:hover {
+    background-color: #e5e5e5;
+  }
+  
+  /* Auth Links */
+  .auth-box .links {
+    margin-top: 15px;
+  }
+  .auth-box .links a {
+    color: #0071e3;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .auth-box .links a:hover {
+    text-decoration: underline;
+  }
