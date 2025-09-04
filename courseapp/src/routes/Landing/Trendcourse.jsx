@@ -1,7 +1,9 @@
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
+import { useNavigate , Navigate} from "react-router-dom";
 
 export default function TrendingCourses() {
+  const navigate = useNavigate();
   return (
     <section className="w-full py-16">
       <div className="max-w-6xl mx-auto px-6 text-center">
@@ -46,7 +48,7 @@ export default function TrendingCourses() {
               <p className="mt-4 font-semibold text-lg">
                 ₹16,900 <span className="text-sm font-normal text-gray-500">+ Taxes applicable</span>
               </p>
-              <Button variant="link" className="text-blue-600 mt-2 p-0">
+              <Button onClick = {() => {navigate("/user/explore")}} variant="link" className="text-blue-600 mt-2 p-0">
                 Know more →
               </Button>
             </CardContent>
@@ -74,7 +76,7 @@ export default function TrendingCourses() {
                 <span className="line-through text-gray-400 text-sm">₹93,500</span> ₹89,000
                 <span className="text-sm font-normal text-gray-500"> + Taxes applicable</span>
               </p>
-              <Button variant="link" className="text-blue-600 mt-2 p-0">
+              <Button onClick = {() => {navigate("/user/explore")}} variant="link" className="text-blue-600 mt-2 p-0">
                 Know more →
               </Button>
             </CardContent>
@@ -83,7 +85,7 @@ export default function TrendingCourses() {
 
         {/* CTA */}
         <div className="mt-12">
-          <Button className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700">
+          <Button onClick = {() => {navigate("/user/explore")}} className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700">
             View All Courses
           </Button>
         </div>

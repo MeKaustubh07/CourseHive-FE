@@ -80,12 +80,10 @@ export default function Topbar() {
     },
     testSeries: {
       admin: [
-        { label: "Manage Tests", path: "/admin/test-series" },
-        { label: "Create Test", path: "/admin/create-test" },
+        { label: "Manage Tests", path: "/admin/managetests" },
       ],
       user: [
-        { label: "NEET Tests", path: "/test-series/neet" },
-        { label: "JEE Tests", path: "/test-series/jee" },
+        { label: "Give Tests", path: "/user/givetests" },
       ],
     },
     material: {

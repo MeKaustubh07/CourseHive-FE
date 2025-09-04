@@ -6,7 +6,7 @@ import { BrowserRouter , Router, Routes, Route , Link} from "react-router-dom";
 import { memo } from "react";
 
 import  Landing from "./routes/Landing/landing.jsx";
-import { TestSeries  } from "./routes/AdminDash/Tests.jsx";
+import { ManageTests  } from "./routes/AdminDash/ManageTests.jsx";
 import Materials from "./routes/AdminDash/Materials.jsx";
 import { More  } from "./routes/AdminDash/More.jsx";
 import PDFViewer from "./routes/Landing/PdfView.jsx" ;
@@ -19,7 +19,7 @@ import Explore from "./routes/userDash/Explore.jsx";
 import MyPurchase from "./routes/userDash/MyPurchase.jsx" ;
 import AdminCourses from "./routes/AdminDash/Editcourse.jsx";
 import CourseForm from "./routes/AdminDash/Courses.jsx";
-
+import GiveTests from "./routes/userDash/GiveTests.jsx";
 import AboutUs from "./routes/Landing/AboutUs.jsx";
 import AboutProject from "./routes/Landing/AboutProject.jsx";
 import UserMaterials from "./routes/userDash/UserMaterials.jsx";
@@ -32,7 +32,7 @@ const MainContent = memo(function MainContent() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/admin/addcourse" element={<CourseForm />} />
-        <Route path="/admin/test-series" element={<TestSeries />} />
+        <Route path="/admin/managetests" element={<ManageTests />} />
         <Route path="/admin/more" element={<More />} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/signup" element={<Signup />} />
@@ -48,6 +48,9 @@ const MainContent = memo(function MainContent() {
         <Route path="/user/watch/:courseid" element={<WatchCourse />} />
         <Route path="/user/papers" element={<UserPapers />} />
         <Route path="/user/materials" element={<UserMaterials />} />
+        <Route path="/user/givetests" element={<GiveTests />} />
+        
+
 
 
         <Route path="/aboutus" element={<AboutUs />} />

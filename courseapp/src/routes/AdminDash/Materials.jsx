@@ -234,13 +234,35 @@ const handleDownload = async (material) => {
   }
 
   return (
-    <div className="p-6">
-      {/* Upload Form */}
-      <Card className="shadow-md rounded-2xl p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">
-          Upload Study Material / Paper
-        </h2>
-        <CardContent>
+    <div className="relative min-h-screen overflow-y-auto">
+      {/* Background layer */}
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
+            radial-gradient(circle 500px at 0% 20%, rgba(139,92,246,0.3), transparent),
+            radial-gradient(circle 500px at 100% 0%, rgba(59,130,246,0.3), transparent)
+          `,
+          backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
+        }}
+      />
+
+      <div className="container mx-auto px-4 py-10">
+        {/* Upload Form */}
+        <div
+          className="
+            w-full rounded-2xl p-6 mb-8
+            bg-gradient-to-r from-purple-100 via-white to-blue-100
+            border border-gray-200/40
+            flex flex-col gap-4
+          "
+        >
+          <h2 className="text-xl font-semibold text-gray-800">
+            Upload Study Material / Paper
+          </h2>
+
           <div className="flex flex-col md:flex-row gap-4">
             {/* Title Input */}
             <input
@@ -248,14 +270,22 @@ const handleDownload = async (material) => {
               placeholder="Enter title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border rounded-lg px-3 py-2 flex-1"
+              className="
+                flex-1 px-3 py-2 rounded-lg border border-gray-300
+                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+                bg-white/70
+              "
             />
 
             {/* Type Select */}
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="border rounded-lg px-3 py-2"
+              className="
+                px-3 py-2 rounded-lg border border-gray-300
+                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+                bg-white/70
+              "
             >
               <option value="material">Material</option>
               <option value="paper">Paper</option>
@@ -266,104 +296,114 @@ const handleDownload = async (material) => {
               type="file"
               accept="application/pdf,.doc,.docx,.ppt,.pptx"
               onChange={(e) => setFile(e.target.files[0])}
-              className="border rounded-lg px-3 py-2"
+              className="
+                px-3 py-2 rounded-lg border border-gray-300
+                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+                bg-white/70
+              "
             />
 
             <Button
               onClick={handleUpload}
-              className="bg-black text-white hover:bg-gray-800"
+              className="rounded-lg bg-black text-white hover:bg-gray-800 transition"
             >
               Upload
             </Button>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Uploaded Files Grid */}
-      <h3 className="text-lg font-medium mb-4 text-gray-700">
-        Your Uploads ({uploads.length})
-      </h3>
-      {uploads.length === 0 ? (
-        <Card className="p-8 text-center">
-          <p className="text-gray-500">
-            No files uploaded yet. Upload your first file above.
-          </p>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {uploads.map((u) => (
-            <motion.div
-              key={u._id}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center text-center"
-            >
-              {/* File Type Icon */}
-              {u.type === "paper" ? (
-                <div className="w-16 h-16 bg-red-500 text-white flex items-center justify-center rounded-xl mb-3 text-xl font-bold">
-                  📄
-                </div>
-              ) : (
-                <div className="w-16 h-16 bg-blue-500 text-white flex items-center justify-center rounded-xl mb-3 text-xl font-bold">
-                  📚
-                </div>
-              )}
-
-              {/* File Info */}
-              <p
-                className="font-medium text-gray-800 truncate w-full"
-                title={u.title}
-              >
-                {u.title}
-              </p>
-              <span className="text-xs text-gray-500 uppercase mt-1">
-                {u.type}
-              </span>
-              <span className="text-xs text-gray-400 mt-1">
-                {new Date(u.createdAt).toLocaleDateString()}
-              </span>
-
-              {/* File size if available */}
-              {u.fileSize && (
-                <span className="text-xs text-gray-400">
-                  {(u.fileSize / 1024 / 1024).toFixed(2)} MB
-                </span>
-              )}
-
-              {/* Actions */}
-              <div className="flex gap-2 mt-4 flex-wrap justify-center">
-                <button
-                  onClick={() => handleDownload(u)}
-                  disabled={downloading === u._id}
-                  className={`text-sm px-3 py-1 rounded-lg flex items-center gap-1 ${
-                    downloading === u._id
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-green-100 text-green-600 hover:bg-green-200"
-                  }`}
-                >
-                  {downloading === u._id ? (
-                    <>
-                      <div className="animate-spin w-3 h-3 border border-gray-400 border-t-transparent rounded-full"></div>
-                      <span>Downloading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>📥</span>
-                      <span>Download</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={() => handleDelete(u._id)}
-                  className="text-sm px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200"
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.div>
-          ))}
         </div>
-      )}
+
+        {/* Uploaded Files Grid */}
+        <h3 className="text-lg font-medium mb-4 text-gray-700">
+          Your Uploads ({uploads.length})
+        </h3>
+
+        {uploads.length === 0 ? (
+          <Card className="p-8 text-center bg-white/60 backdrop-blur-md shadow-sm rounded-2xl">
+            <p className="text-gray-500">
+              No files uploaded yet. Upload your first file above.
+            </p>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {uploads.map((u) => (
+              <motion.div
+                key={u._id}
+                whileHover={{ scale: 1.03 }}
+                className="
+                  bg-white/70 backdrop-blur-md
+                  shadow-sm rounded-2xl p-4
+                  flex flex-col items-center text-center
+                  border border-gray-200/40
+                "
+              >
+                {/* File Type Icon */}
+                {u.type === "paper" ? (
+                  <div className="w-16 h-16 bg-red-500 text-white flex items-center justify-center rounded-xl mb-3 text-xl font-bold">
+                    📄
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 bg-blue-500 text-white flex items-center justify-center rounded-xl mb-3 text-xl font-bold">
+                    📚
+                  </div>
+                )}
+
+                {/* File Info */}
+                <p
+                  className="font-medium text-gray-800 truncate w-full"
+                  title={u.title}
+                >
+                  {u.title}
+                </p>
+                <span className="text-xs text-gray-500 uppercase mt-1">
+                  {u.type}
+                </span>
+                <span className="text-xs text-gray-400 mt-1">
+                  {new Date(u.createdAt).toLocaleDateString()}
+                </span>
+
+                {/* File size if available */}
+                {u.fileSize && (
+                  <span className="text-xs text-gray-400">
+                    {(u.fileSize / 1024 / 1024).toFixed(2)} MB
+                  </span>
+                )}
+
+                {/* Actions */}
+                <div className="flex gap-2 mt-4 flex-wrap justify-center">
+                  <button
+                    onClick={() => handleDownload(u)}
+                    disabled={downloading === u._id}
+                    className={`text-sm px-3 py-1 rounded-lg flex items-center gap-1 ${
+                      downloading === u._id
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-green-100 text-green-600 hover:bg-green-200"
+                    }`}
+                  >
+                    {downloading === u._id ? (
+                      <>
+                        <div className="animate-spin w-3 h-3 border border-gray-400 border-t-transparent rounded-full"></div>
+                        <span>Downloading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>📥</span>
+                        <span>Download</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(u._id)}
+                    className="text-sm px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

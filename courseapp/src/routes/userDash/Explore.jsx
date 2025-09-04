@@ -249,7 +249,7 @@ export default function Explore() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="text-2xl font-bold text-gray-900">
-                        ${course.price || 0}
+                      ₹{course.price || 0}
                       </div>
                       {course.isPurchased ? (
                         <button
