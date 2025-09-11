@@ -14,13 +14,13 @@ export default function TrendingCourses() {
 
         {/* Tabs */}
         <div className="flex justify-center space-x-4 mb-10">
-          <button className="px-4 py-2 rounded-full bg-white shadow text-gray-700 hover:bg-gray-100">
+          <button onClick = {() => {navigate("/user/explore")}} className="px-4 py-2 rounded-full bg-white shadow text-gray-700 hover:bg-gray-100">
             NEET
           </button>
           <button className="px-4 py-2 rounded-full bg-blue-600 text-white shadow hover:bg-blue-700">
             JEE
           </button>
-          <button className="px-4 py-2 rounded-full bg-white shadow text-gray-700 hover:bg-gray-100">
+          <button onClick = {() => {navigate("/user/explore")}} className="px-4 py-2 rounded-full bg-white shadow text-gray-700 hover:bg-gray-100">
             Class 6–10
           </button>
         </div>

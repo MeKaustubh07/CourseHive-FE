@@ -10,6 +10,7 @@ export default function Topbar() {
   const location = useLocation();
   const [session, setSession] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const hoverTimeoutRef = useRef(null);
 
   // ✅ session check logic
@@ -49,6 +50,18 @@ export default function Topbar() {
     setSession(null);
     window.dispatchEvent(new Event("sessionUpdate"));
     setTimeout(() => navigate("/"), 100);
+  };
+
+  // Enhanced navigation handler for mobile
+  const handleMobileNavigation = (path, label) => {
+    console.log(`Mobile Navigation: ${label} -> ${path}`);
+    try {
+      navigate(path);
+      setIsMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Navigation error:', error);
+      alert(`Failed to navigate to ${label}. Please try again.`);
+    }
   };
 
   // ✅ hover delay functions
@@ -121,6 +134,7 @@ export default function Topbar() {
               className="flex items-center justify-between px-4 py-3 
                          text-gray-700 hover:bg-gray-100 
                          transition-all duration-200 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <span className="font-medium">{navItem.label}</span>
               <svg
@@ -146,7 +160,18 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div className="left-section">
-        <Link to="/">
+        {/* Allen Logo - clickable to open sidebar on mobile, regular link on desktop */}
+        <div className="block md:hidden">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrvaJMaCtx0exwrtEvIzdfopHdsoKOp7qLDg&s"
+            alt="Logo"
+            className="logo cursor-pointer"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          />
+        </div>
+        
+        {/* Logo - regular link for desktop */}
+        <Link to="/" className="hidden md:block">
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrvaJMaCtx0exwrtEvIzdfopHdsoKOp7qLDg&s"
             alt="Logo"
@@ -155,7 +180,8 @@ export default function Topbar() {
         </Link>
       </div>
 
-      <nav className="middle-section">
+      {/* Desktop Navigation */}
+      <nav className="middle-section desktop-nav">
         {["courses", "testSeries", "material", "more"].map((item) => (
           <div
             key={item}
@@ -178,7 +204,15 @@ export default function Topbar() {
       </nav>
 
       <div className="right-section">
-        <CallUsButton />
+        <div className="hidden md:block">
+          <CallUsButton />
+        </div>
+        
+        {/* Phone button - always shown in mobile view */}
+        <div className="block md:hidden mr-1">
+          <CallUsButton />
+        </div>
+        
         {session ? (
           <button
             onClick={handleLogout}
@@ -195,6 +229,61 @@ export default function Topbar() {
           </Link>
         )}
       </div>
+
+      {/* Mobile Menu - Slide from right */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <div 
+            className="mobile-menu-drawer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mobile-menu-header">
+              <h2 
+                className="text-lg font-bold text-gray-800 cursor-pointer hover:text-blue-600 transition-colors"
+                onClick={() => {
+                  navigate('/');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Menu
+              </h2>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="mobile-menu-content">
+              {["courses", "testSeries", "material", "more"].map((item) => (
+                <div key={item} className="mobile-menu-section">
+                  <h3 className="mobile-menu-title capitalize">{item}</h3>
+                  <div className="mobile-menu-links">
+                    {(session?.type === "admin"
+                      ? navigationData[item].admin
+                      : navigationData[item].user
+                    ).map((navItem, index) => (
+                      <div
+                        key={index}
+                        className="mobile-menu-link"
+                        onClick={() => handleMobileNavigation(navItem.path, navItem.label)}
+                      >
+                        {navItem.label}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
+

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../Components/AuthLayout";
 import api from "../../lib/api";
 
+
 export default function Login() {
   const userType = "admin";
   const [email, setEmail] = useRecoilState(loginEmailAtom(userType));
@@ -73,12 +74,11 @@ export default function Login() {
   };
 
   return (
-    <div className="legacy">
-      <AuthLayout title="Admin Login">
-        {/* Inputs */}
-        <input
-          type="email"
-          placeholder="Email"
+    <AuthLayout title="Admin Login">
+      {/* Inputs */}
+      <input
+        type="email"
+        placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -122,6 +122,5 @@ export default function Login() {
           </div>
         )}
       </AuthLayout>
-    </div>
   );
 }

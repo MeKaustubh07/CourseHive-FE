@@ -237,7 +237,7 @@ const handleDownload = async (material) => {
     <div className="relative min-h-screen overflow-y-auto">
       {/* Background layer */}
       <div
-        className="absolute inset-0 -z-10"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
@@ -252,65 +252,64 @@ const handleDownload = async (material) => {
       <div className="container mx-auto px-4 py-10">
         {/* Upload Form */}
         <div
-          className="
-            w-full rounded-2xl p-6 mb-8
-            bg-gradient-to-r from-purple-100 via-white to-blue-100
-            border border-gray-200/40
-            flex flex-col gap-4
-          "
-        >
-          <h2 className="text-xl font-semibold text-gray-800">
-            Upload Study Material / Paper
-          </h2>
+  className="
+    w-full rounded-2xl p-6 mb-8
+    bg-white/40 backdrop-blur-md
+    shadow-lg
+  "
+>
+  <h2 className="text-xl font-semibold text-gray-800 mb-4">
+    Upload Study Material / Paper
+  </h2>
 
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Title Input */}
-            <input
-              type="text"
-              placeholder="Enter title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="
-                flex-1 px-3 py-2 rounded-lg border border-gray-300
-                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
-                bg-white/70
-              "
-            />
+  <div className="flex flex-col md:flex-row gap-4">
+    {/* Title Input */}
+    <input
+      type="text"
+      placeholder="Enter title..."
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="
+        flex-1 px-3 py-2 rounded-lg border border-gray-300/30
+        focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+        bg-white/70
+      "
+    />
 
-            {/* Type Select */}
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="
-                px-3 py-2 rounded-lg border border-gray-300
-                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
-                bg-white/70
-              "
-            >
-              <option value="material">Material</option>
-              <option value="paper">Paper</option>
-            </select>
+    {/* Type Select */}
+    <select
+      value={type}
+      onChange={(e) => setType(e.target.value)}
+      className="
+        px-3 py-2 rounded-lg border border-gray-300/30
+        focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+        bg-white/70
+      "
+    >
+      <option value="material">Material</option>
+      <option value="paper">Paper</option>
+    </select>
 
-            {/* File Input */}
-            <input
-              type="file"
-              accept="application/pdf,.doc,.docx,.ppt,.pptx"
-              onChange={(e) => setFile(e.target.files[0])}
-              className="
-                px-3 py-2 rounded-lg border border-gray-300
-                focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
-                bg-white/70
-              "
-            />
+    {/* File Input */}
+    <input
+      type="file"
+      accept="application/pdf,.doc,.docx,.ppt,.pptx"
+      onChange={(e) => setFile(e.target.files[0])}
+      className="
+        px-3 py-2 rounded-lg border border-gray-300/30
+        focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400
+        bg-white/70
+      "
+    />
 
-            <Button
-              onClick={handleUpload}
-              className="rounded-lg bg-black text-white hover:bg-gray-800 transition"
-            >
-              Upload
-            </Button>
-          </div>
-        </div>
+    <Button
+      onClick={handleUpload}
+      className="rounded-lg bg-black text-white hover:bg-gray-800 transition"
+    >
+      Upload
+    </Button>
+  </div>
+</div>
 
         {/* Uploaded Files Grid */}
         <h3 className="text-lg font-medium mb-4 text-gray-700">

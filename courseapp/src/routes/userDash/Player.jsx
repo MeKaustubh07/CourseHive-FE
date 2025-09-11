@@ -48,9 +48,9 @@ export default function WatchCourse() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white relative">
+      <div className="relative min-h-screen overflow-y-auto">
         <div
-          className="absolute inset-0 z-0"
+          className="fixed inset-0 z-0"
           style={{
             backgroundImage: `
               linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
@@ -71,9 +71,9 @@ export default function WatchCourse() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white relative">
+      <div className="relative min-h-screen overflow-y-auto">
         <div
-          className="absolute inset-0 z-0"
+          className="fixed inset-0 z-0"
           style={{
             backgroundImage: `
               linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
@@ -127,7 +127,7 @@ export default function WatchCourse() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white relative">
         <div
-          className="absolute inset-0 z-0"
+          className="fixed inset-0 z-0"
           style={{
             backgroundImage: `
               linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
@@ -154,17 +154,17 @@ export default function WatchCourse() {
     <div className="min-h-screen w-full bg-white relative">
       {/* Static Gradient Background */}
       <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
-            radial-gradient(circle 500px at 0% 20%, rgba(139,92,246,0.3), transparent),
-            radial-gradient(circle 500px at 100% 0%, rgba(59,130,246,0.3), transparent)
-          `,
-          backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
-        }}
-      />
+          className="fixed inset-0 z-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
+              radial-gradient(circle 500px at 0% 20%, rgba(139,92,246,0.3), transparent),
+              radial-gradient(circle 500px at 100% 0%, rgba(59,130,246,0.3), transparent)
+            `,
+            backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
+          }}
+        />
 
       {/* Content */}
       <div className="relative z-10">
@@ -192,8 +192,7 @@ export default function WatchCourse() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
               <p className="text-gray-600 text-sm">
-                by {course.creatorId?.firstname} {course.creatorId?.lastname}
-              </p>
+              by {course.Admin?.firstName} {course.Admin?.lastName}              </p>
             </div>
           </div>
           <div className="text-sm text-gray-600">

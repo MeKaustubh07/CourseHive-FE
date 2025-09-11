@@ -73,8 +73,7 @@ export default function UserSignup() {
   };
 
   return (
-    <div className="legacy">
-      <AuthLayout title="User Signup">
+    <AuthLayout title="User Signup">
         <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
         <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -94,6 +93,5 @@ export default function UserSignup() {
           <Link to="/user/login">Already have an account?</Link>
         </div>
       </AuthLayout>
-    </div>
   );
 }

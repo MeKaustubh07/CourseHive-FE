@@ -64,8 +64,7 @@ export default function UserLogin() {
     };
 
     return (
-        <div className="legacy">
-            <AuthLayout title="User Login">
+        <AuthLayout title="User Login">
                 <input
                     type="email"
                     placeholder="Email"
@@ -91,6 +90,5 @@ export default function UserLogin() {
                     </p>
                 )}
             </AuthLayout>
-        </div>
     );
 }

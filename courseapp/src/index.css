@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
+/* Base responsive topbar styles */
 .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0.5rem 1.25rem;   /* smaller vertical padding */
+    padding: 0.5rem 1rem;
     background-color: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    position: fixed;           /* make it fixed */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;              /* standard navbar height */
+    height: 60px;
     z-index: 1000;
   }
   
   .logo {
-    height: 2rem;  /* smaller logo size */
-    width: 2rem;
+    height: 2.5rem;
+    width: 2.5rem;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  /* Mobile-first responsive adjustments */
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 0.5rem 0.75rem;
+    }
+    
+    .logo {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .topbar {
+      padding: 0.25rem 0.5rem;
+    }
+    
+    .logo {
+      height: 1.75rem;
+      width: 1.75rem;
+    }
   }
 
 .left-section {

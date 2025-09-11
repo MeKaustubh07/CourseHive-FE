@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import api from "../../lib/api";
 
 export default function CourseForm() {
   const [form, setForm] = useState({
@@ -43,9 +44,8 @@ export default function CourseForm() {
         data.append("videoUrl", video);
       }
 
-      const res = await axios.post("http://localhost:3000/api/admin/addcourse", data, {
+      const res = await api.post("/api/admin/addcourse", data, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -72,7 +72,7 @@ export default function CourseForm() {
     <div className="min-h-screen w-full bg-white relative">
       {/* Dual Gradient Overlay Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),

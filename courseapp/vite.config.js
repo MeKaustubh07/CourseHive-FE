@@ -15,15 +15,10 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",   // 👈 Allow external devices (like your phone) to connect
+    port: 5173,        // 👈 optional, but makes sure it’s consistent
     proxy: {
-      // ✅ All admin API requests go to Express (port 3000)
-      "/api/admin": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-        secure: false,
-      },
-      // ✅ All user API requests go to Express (port 3000)
-      "/api/user": {
+      "/api": {
         target: "http://localhost:3000",
         changeOrigin: true,
         secure: false,

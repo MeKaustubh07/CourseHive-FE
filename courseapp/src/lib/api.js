@@ -1,21 +1,30 @@
 import axios from "axios";
 
-// Use same-origin in dev to leverage Vite proxy; use VITE_API_URL in prod
-const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "" : "");
+// Use relative URLs in development to leverage Vite proxy for both desktop and mobile
+// Use VITE_API_URL in production
+const baseURL = import.meta.env.PROD 
+  ? import.meta.env.VITE_API_URL 
+  : ""; // Empty string uses relative URLs, allowing Vite proxy to work
 
 const api = axios.create({
   baseURL,
   withCredentials: true,
 });
 
-// Attach user token automatically if present
+// Attach token automatically if present (admin takes priority)
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("user_token");
-  if (token) {
-    config.headers = config.headers || {};
-    // Prefer standard Authorization header to avoid CORS issues
-    config.headers["Authorization"] = `Bearer ${token}`;
+  config.headers = config.headers || {};
+
+  // Prefer admin token if available, else fall back to user token
+  const adminToken = localStorage.getItem("admin_token");
+  const userToken = localStorage.getItem("user_token");
+
+  if (adminToken) {
+    config.headers["Authorization"] = `Bearer ${adminToken}`;
+  } else if (userToken) {
+    config.headers["Authorization"] = `Bearer ${userToken}`;
   }
+
   return config;
 });
 

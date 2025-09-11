@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import api from "../../lib/api";
 
 export default function UserPapers() {
   const [papers, setPapers] = useState([]);
@@ -10,10 +11,7 @@ export default function UserPapers() {
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const token = localStorage.getItem("user_token");
-        const res = await axios.get("http://localhost:3000/api/user/papers", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/api/user/papers");
         setPapers(res.data.papers);
       } catch (error) {
         console.error("❌ Error fetching papers:", error);
@@ -26,11 +24,9 @@ export default function UserPapers() {
 
   const handleDownload = async (id, name) => {
     try {
-      const token = localStorage.getItem("user_token");
-      const res = await axios.get(
-        `http://localhost:3000/api/user/materials/download/${id}`,
+      const res = await api.get(
+        `/api/user/materials/download/${id}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
           responseType: "blob",
         }
       );
@@ -53,7 +49,7 @@ export default function UserPapers() {
     <div className="min-h-screen w-full bg-white relative">
       {/* Dual Gradient Overlay (Top) Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),

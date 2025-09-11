@@ -25,7 +25,7 @@ export default function AdminSignup() {
       setLoading(true);
       setMsg("");
 
-      const res = await api.post("/admin/signup", { firstName, lastName, email, password });
+      const res = await api.post("/api/admin/signup", { firstName, lastName, email, password });
 
       if (res.data?.success) {
         // ✅ clear any user session
@@ -60,8 +60,7 @@ export default function AdminSignup() {
   };
 
   return (
-    <div className="legacy">
-      <AuthLayout title="Admin Signup">
+    <AuthLayout title="Admin Signup">
         <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
         <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -81,6 +80,5 @@ export default function AdminSignup() {
           <Link to="/admin/login">Already have an account?</Link>
         </div>
       </AuthLayout>
-    </div>
   );
 }

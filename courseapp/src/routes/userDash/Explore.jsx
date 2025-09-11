@@ -96,7 +96,7 @@ export default function Explore() {
     <div className="relative min-h-screen">
       {/* Static Background */}
       <div
-        className="fixed inset-0 -z-10"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
@@ -260,19 +260,23 @@ export default function Explore() {
                         </button>
                       ) : (
                         <button
-                          onClick={() => handlePurchase(course._id)}
-                          disabled={purchasing === course._id}
-                          className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center"
-                        >
-                          {purchasing === course._id ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                              Purchasing...
-                            </>
-                          ) : (
-                            'Purchase'
-                          )}
-                        </button>
+  onClick={() => handlePurchase(course._id)}
+  disabled={purchasing === course._id}
+  className={`px-4 py-2 rounded-md shadow-sm text-white transition-colors flex items-center justify-center
+    ${purchasing === course._id 
+      ? "bg-indigo-400 cursor-not-allowed" 
+      : "bg-indigo-600 hover:bg-indigo-700"
+    }`}
+>
+  {purchasing === course._id ? (
+    <>
+      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+      Purchasing...
+    </>
+  ) : (
+    "Purchase"
+  )}
+</button>
                       )}
                     </div>
                   </div>
