@@ -111,100 +111,26 @@ const AboutUs = () => {
       />
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-3 gap-6 p-10">
-        {/* LEFT SIDE */}
-        <div className="col-span-2 space-y-6">
-          {/* Academic */}
-          <section className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-bold mb-3">Academic Record</h2>
-            <ul className="list-disc pl-5 space-y-1">
-              {data.academic.map((item, i) => (
-                <li key={i}>
-                  {item.degree} ({item.year}) – {item.institute}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Scores */}
-          <section className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-bold mb-3">Academic Scores</h2>
-            <div className="grid grid-cols-5 gap-4 text-center">
-              {data.academicScore.map((s, i) => (
-                <div key={i} className="bg-gray-50 p-3 rounded-lg shadow-sm">
-                  <p className="text-sm">{s.year}</p>
-                  <p className="font-bold text-lg">{s.score}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Projects */}
-          <section className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-bold mb-4">Projects</h2>
-            {data.projects.map((proj, i) => (
-              <div key={i} className="mb-4">
-                <h3 className="font-semibold text-lg">{i + 1}. {proj.title}</h3>
-                <p className="text-sm mt-1">{proj.description}</p>
-                <p className="text-gray-700 text-sm mt-1">
-                  <span className="font-medium">Tech:</span> {proj.tech}
-                </p>
-                <div className="mt-1 space-x-3">
-                  <a
-                    href={proj.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline text-sm"
-                  >
-                    🔗 GitHub
-                  </a>
-                  {proj.demo && (
-                    <a
-                      href={proj.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-red-500 hover:underline text-sm"
-                    >
-                      ▶ Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </section>
-
-          {/* Experience (Replaces Co-Curricular) */}
-          <section className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-bold mb-3">Extra Curricular </h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {data.experience.map((exp, i) => (
-                <li key={i}>
-                  <span className="font-medium">{exp.title}:</span>{" "}
-                  {exp.description}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-
-        {/* RIGHT SIDE */}
-        <div className="col-span-1 space-y-6">
+      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 p-4 sm:p-6 lg:p-10">
+        
+        {/* RIGHT SIDE - Profile (Mobile First) */}
+        <div className="order-1 lg:order-2 lg:col-span-1 space-y-4 sm:space-y-6">
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow overflow-hidden">
             <img
               src={data.profile.photo}
               alt={data.profile.name}
-              className="w-full h-56 object-cover opacity-90"
+              className="w-full h-48 sm:h-56 object-cover opacity-90"
             />
-            <div className="p-6 text-center">
-              <h2 className="text-2xl font-bold">{data.profile.name}</h2>
-              <p className="text-gray-600">{data.profile.email}</p>
-              <p className="text-gray-500 text-sm">{data.profile.address}</p>
+            <div className="p-4 sm:p-6 text-center">
+              <h2 className="text-xl sm:text-2xl font-bold">{data.profile.name}</h2>
+              <p className="text-gray-600 text-sm sm:text-base">{data.profile.email}</p>
+              <p className="text-gray-500 text-xs sm:text-sm mt-1">{data.profile.address}</p>
               <a
                 href={`https://github.com/${data.profile.Github}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-block text-blue-500 hover:underline"
+                className="mt-2 inline-block text-blue-500 hover:underline text-sm sm:text-base"
               >
                 @{data.profile.Github}
               </a>
@@ -212,12 +138,93 @@ const AboutUs = () => {
           </div>
 
           {/* Bio Section */}
-          <div className="bg-white p-6 rounded-2xl shadow">
-            <h2 className="text-xl font-bold mb-3">About Me</h2>
-            <p className="text-gray-700 text-sm whitespace-pre-line">
+          <div className="bg-white p-4 sm:p-6 rounded-2xl shadow">
+            <h2 className="text-lg sm:text-xl font-bold mb-3">About Me</h2>
+            <p className="text-gray-700 text-sm sm:text-base whitespace-pre-line leading-relaxed">
               {data.bio}
             </p>
           </div>
+        </div>
+
+        {/* LEFT SIDE - Details (Mobile Second) */}
+        <div className="order-2 lg:order-1 lg:col-span-2 space-y-4 sm:space-y-6">
+          {/* Academic */}
+          <section className="bg-white p-4 sm:p-6 rounded-2xl shadow">
+            <h2 className="text-lg sm:text-xl font-bold mb-3">Academic Record</h2>
+            <ul className="list-disc pl-5 space-y-1 sm:space-y-2 text-sm sm:text-base">
+              {data.academic.map((item, i) => (
+                <li key={i}>
+                  <span className="font-medium">{item.degree}</span> ({item.year}) – {item.institute}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Scores */}
+          <section className="bg-white p-4 sm:p-6 rounded-2xl shadow">
+            <h2 className="text-lg sm:text-xl font-bold mb-3">Academic Scores</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4 text-center">
+              {data.academicScore.map((s, i) => (
+                <div key={i} className="bg-gray-50 p-3 rounded-lg shadow-sm">
+                  <p className="text-xs sm:text-sm font-medium">{s.year}</p>
+                  <p className="font-bold text-sm sm:text-lg text-blue-600">{s.score}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Projects */}
+          <section className="bg-white p-4 sm:p-6 rounded-2xl shadow">
+            <h2 className="text-lg sm:text-xl font-bold mb-4">Projects</h2>
+            <div className="space-y-4 sm:space-y-5">
+              {data.projects.map((proj, i) => (
+                <div key={i} className="border-b border-gray-100 last:border-b-0 pb-4 last:pb-0">
+                  <h3 className="font-semibold text-base sm:text-lg text-gray-900">
+                    {i + 1}. {proj.title}
+                  </h3>
+                  <p className="text-sm sm:text-base mt-2 text-gray-700 leading-relaxed">
+                    {proj.description}
+                  </p>
+                  <p className="text-gray-600 text-xs sm:text-sm mt-2">
+                    <span className="font-medium text-gray-800">Tech Stack:</span> {proj.tech}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    <a
+                      href={proj.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium"
+                    >
+                      🔗 GitHub
+                    </a>
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-red-600 hover:text-red-800 hover:underline text-sm font-medium"
+                      >
+                        ▶ Demo
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Experience */}
+          <section className="bg-white p-4 sm:p-6 rounded-2xl shadow">
+            <h2 className="text-lg sm:text-xl font-bold mb-3">Extra Curricular</h2>
+            <ul className="list-disc pl-5 space-y-2 sm:space-y-3 text-sm sm:text-base">
+              {data.experience.map((exp, i) => (
+                <li key={i}>
+                  <span className="font-semibold text-gray-900">{exp.title}:</span>{" "}
+                  <span className="text-gray-700">{exp.description}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </div>
     </div>

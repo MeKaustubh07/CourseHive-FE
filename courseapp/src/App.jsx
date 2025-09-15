@@ -7,7 +7,6 @@ import { memo } from "react";
 
 import  Landing from "./routes/Landing/landing.jsx";
 import Materials from "./routes/AdminDash/Materials.jsx";
-import { More  } from "./routes/AdminDash/More.jsx";
 import PDFViewer from "./routes/Landing/PdfView.jsx" ;
 import  Signup  from "./routes/AdminDash/Signup.jsx";
 import TopBar from "./routes/Landing/Topbar.jsx" ;
@@ -33,7 +32,6 @@ const MainContent = memo(function MainContent() {
         <Route path="/" element={<Landing />} />
         <Route path="/admin/addcourse" element={<CourseForm />} />
         <Route path="/admin/managetests" element={<AdminTests />} />
-        <Route path="/admin/more" element={<More />} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/signup" element={<Signup />} />
         <Route path="/admin/mycourses" element={<AdminCourses />} />

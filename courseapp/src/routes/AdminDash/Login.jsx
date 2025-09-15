@@ -3,6 +3,7 @@ import { loginEmailAtom, loginPasswordAtom, loginSelector } from "../../store/ad
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../Components/AuthLayout";
+import GoogleAuth from "../../Components/GoogleAuth";
 import api from "../../lib/api";
 
 
@@ -73,6 +74,60 @@ export default function Login() {
     }
   };
 
+  const handleGoogleAuth = async (googleUser, credential) => {
+    try {
+      setLoading(true);
+      setMsg("");
+
+      // Send Google auth data to your backend
+      const response = await api.post("/api/admin/google-auth", {
+        googleUser,
+        credential,
+        mode: 'login'
+      });
+
+      if (response.data?.success) {
+        // Clear any active user session first
+        localStorage.removeItem("user_token");
+        localStorage.removeItem("user_user");
+
+        // Store admin token + data
+        if (response.data.token) {
+          localStorage.setItem("admin_token", response.data.token);
+        }
+
+        if (response.data.user) {
+          const adminData = {
+            firstName: response.data.user.firstName,
+            lastName: response.data.user.lastName,
+            email: response.data.user.email,
+            profilePicture: response.data.user.profilePicture
+          };
+          localStorage.setItem("admin_user", JSON.stringify(adminData));
+          console.log("✅ Admin Google auth successful:", adminData);
+
+          // notify Topbar
+          window.dispatchEvent(new Event("sessionUpdate"));
+        }
+
+        setMsg("Google signin successful! Welcome to EduPortal!");
+        setTimeout(() => navigate("/"), 1000);
+      } else {
+        setMsg(response.data?.message || "Google signin failed");
+      }
+    } catch (err) {
+      console.error("Google auth error:", err);
+      setMsg(err.response?.data?.message || "Google signin failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error) => {
+    console.error("Google Auth Error:", error);
+    setMsg("Google authentication failed. Please try again.");
+  };
+
   return (
     <AuthLayout title="Admin Login">
       {/* Inputs */}
@@ -93,6 +148,14 @@ export default function Login() {
         <button onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        {/* Google Auth */}
+        <GoogleAuth 
+          onSuccess={handleGoogleAuth}
+          onError={handleGoogleError}
+          userType="admin"
+          mode="login"
+        />
 
         {/* Show message */}
         {msg && (

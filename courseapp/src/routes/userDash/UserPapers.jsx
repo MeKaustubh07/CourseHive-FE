@@ -12,9 +12,13 @@ export default function UserPapers() {
     const fetchPapers = async () => {
       try {
         const res = await api.get("/api/user/papers");
-        setPapers(res.data.papers);
+        console.log("📦 Papers response:", res.data);
+        setPapers(res.data.papers || []);
       } catch (error) {
         console.error("❌ Error fetching papers:", error);
+        if (error.response) {
+          console.error("🔍 Error details:", error.response.data);
+        }
       } finally {
         setLoading(false);
       }
@@ -40,10 +44,20 @@ export default function UserPapers() {
       link.remove();
     } catch (error) {
       console.error("❌ Download failed:", error);
+      alert("Failed to download paper. Please try again.");
     }
   };
 
-  if (loading) return <p className="text-center py-10">Loading Papers...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm sm:text-base">Loading Papers...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-white relative">
@@ -61,36 +75,68 @@ export default function UserPapers() {
         }}
       />
 
-      {/* Your Content */}
-      <section className="relative z-10 py-16 px-8">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-           Question Papers
-        </h2>
-        {papers.length === 0 ? (
-          <p className="text-center text-gray-500">No papers available.</p>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {papers.map((p, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.03 }}
-                transition={{ type: "spring", stiffness: 200 }}
-                className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-md border"
-              >
-                <h3 className="font-semibold text-lg text-gray-800">
-                  {p.title}
-                </h3>
-                <p className="text-sm text-gray-500 mb-4">{p.originalName}</p>
-                <Button
-                  onClick={() => handleDownload(p._id, p.originalName)}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+      {/* Content Section */}
+      <section className="relative z-10 py-8 sm:py-12 lg:py-16 px-3 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
+             Question Papers
+          </h2>
+          
+          {papers.length === 0 ? (
+            <div className="text-center py-12 px-4">
+              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-6 sm:p-8 shadow-sm max-w-md mx-auto">
+                <div className="text-4xl sm:text-5xl mb-4">📋</div>
+                <p className="text-gray-600 text-base sm:text-lg font-medium mb-2">No papers available</p>
+                <p className="text-gray-500 text-sm">Question papers will appear here once uploaded by your instructor</p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {papers.map((p, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200/50 overflow-hidden"
                 >
-                  Download ⬇
-                </Button>
-              </motion.div>
-            ))}
-          </div>
-        )}
+                  {/* Header */}
+                  <div className="p-4 sm:p-6 border-b border-gray-100">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-2 line-clamp-2">
+                          {p.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-500 truncate" title={p.originalName}>
+                          📋 {p.originalName}
+                        </p>
+                      </div>
+                      <div className="ml-2 flex-shrink-0">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Actions */}
+                  <div className="p-4 sm:p-6">
+                    <Button
+                      onClick={() => handleDownload(p._id, p.originalName)}
+                      className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium py-2 sm:py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span>Download</span>
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

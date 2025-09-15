@@ -6,6 +6,7 @@ import {
   userSignupPasswordAtom 
 } from "../../store/userAtoms";
 import AuthLayout from "../../Components/AuthLayout";
+import GoogleAuth from "../../Components/GoogleAuth";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../lib/api";
@@ -72,6 +73,62 @@ export default function UserSignup() {
     }
   };
 
+  const handleGoogleAuth = async (googleUser, credential) => {
+    try {
+      setLoading(true);
+      setMsg("");
+
+      // Send Google auth data to backend for user signup
+      const response = await api.post("/api/user/google-auth", {
+        googleUser,
+        credential,
+        mode: 'signup'
+      });
+
+      if (response.data?.success) {
+        if (response.data.user) {
+          const userData = {
+            firstName: response.data.user.firstName,
+            lastName: response.data.user.lastName,
+            email: response.data.user.email,
+            profilePicture: response.data.user.profilePicture
+          };
+
+          // clear admin session
+          localStorage.removeItem("admin_user");
+          localStorage.removeItem("admin_token");
+          
+          // store user session
+          localStorage.setItem("user_user", JSON.stringify(userData));
+          window.dispatchEvent(new Event("sessionUpdate"));
+        }
+
+        if (response.data.token) {
+          localStorage.setItem("user_token", response.data.token);
+        }
+
+        setMsg("Google signup successful! Welcome to EduPortal!");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setTimeout(() => navigate("/"), 1000);
+      } else {
+        setMsg(response.data?.message || "Google signup failed");
+      }
+    } catch (err) {
+      console.error("Google signup error:", err);
+      setMsg(err.response?.data?.message || "Google signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error) => {
+    console.error("Google Auth Error:", error);
+    setMsg("Google authentication failed. Please try again.");
+  };
+
   return (
     <AuthLayout title="User Signup">
         <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
@@ -82,6 +139,14 @@ export default function UserSignup() {
         <button onClick={handleSignup} disabled={loading}>
           {loading ? "Signing up..." : "Sign up"}
         </button>
+
+        {/* Google Auth */}
+        <GoogleAuth 
+          onSuccess={handleGoogleAuth}
+          onError={handleGoogleError}
+          userType="user"
+          mode="signup"
+        />
 
         {msg && (
           <p style={{ color: msg.includes("successful") ? "green" : "red", marginTop: "10px", textAlign: "center" }}>

@@ -1,6 +1,25 @@
 import React, { useEffect, useState } from "react";
 import api from "../../lib/api";
 
+// Move BackgroundWrapper outside component to prevent re-creation on each render
+const BackgroundWrapper = ({ children }) => (
+  <div className="min-h-screen w-full bg-white relative">
+    <div
+      className="fixed inset-0 z-0"
+      style={{
+        backgroundImage: `
+          linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
+          radial-gradient(circle 500px at 0% 20%, rgba(139,92,246,0.3), transparent),
+          radial-gradient(circle 500px at 100% 0%, rgba(59,130,246,0.3), transparent)
+        `,
+        backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
+      }}
+    />
+    <div className="relative z-10">{children}</div>
+  </div>
+);
+
 export default function AdminTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,25 +129,6 @@ export default function AdminTests() {
     });
   };
 
-  // background wrapper reused from UserAttempt
-  const BackgroundWrapper = ({ children }) => (
-    <div className="min-h-screen w-full bg-white relative">
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
-            radial-gradient(circle 500px at 0% 20%, rgba(139,92,246,0.3), transparent),
-            radial-gradient(circle 500px at 100% 0%, rgba(59,130,246,0.3), transparent)
-          `,
-          backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
-        }}
-      />
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-
   if (authError) {
     return (
       <BackgroundWrapper>
@@ -211,65 +211,106 @@ export default function AdminTests() {
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
+            <h4 className="font-semibold text-lg">Questions</h4>
             {form.questions.map((q, i) => (
-              <div key={i} className="p-4 border rounded-lg bg-white/60 shadow">
-                <input
-                  className="w-full p-2 border rounded-lg mb-2"
-                  placeholder={`Question ${i + 1}`}
-                  value={q.text}
-                  onChange={(e) => updateQuestion(i, { text: e.target.value })}
-                />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {q.options.map((opt, oi) => (
-                    <div key={oi} className="flex items-center gap-2">
-                      <input
-                        className="flex-1 p-2 border rounded-lg"
-                        value={opt}
-                        onChange={(e) => {
-                          const opts = [...q.options];
-                          opts[oi] = e.target.value;
-                          updateQuestion(i, { options: opts });
-                        }}
-                      />
-                      <label className="text-sm flex items-center gap-1">
-                        <input
-                          type="radio"
-                          checked={q.correctIndex === oi}
-                          onChange={() =>
-                            updateQuestion(i, { correctIndex: oi })
-                          }
-                        />
-                        Correct
-                      </label>
-                    </div>
-                  ))}
+              <div key={i} className="p-4 border border-gray-200 rounded-lg bg-white/60 shadow-sm">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Question {i + 1}
+                  </label>
+                  <textarea
+                    className="w-full p-3 border rounded-lg resize-none text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    placeholder={`Enter question ${i + 1}...`}
+                    value={q.text}
+                    onChange={(e) => updateQuestion(i, { text: e.target.value })}
+                    rows={3}
+                  />
                 </div>
-                <div className="mt-3 flex items-center gap-3">
+                
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Answer Options (select the correct one):
+                  </label>
+                  <div className="space-y-3">
+                    {q.options.map((opt, oi) => (
+                      <div key={oi} className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <div className="flex items-center gap-2">
+                          <input
+                            className="flex-1 p-2 border rounded-lg text-base min-w-0"
+                            value={opt}
+                            placeholder={`Option ${oi + 1}`}
+                            onChange={(e) => {
+                              const opts = [...q.options];
+                              opts[oi] = e.target.value;
+                              updateQuestion(i, { options: opts });
+                            }}
+                          />
+                          <label className="text-sm flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
+                            <input
+                              type="radio"
+                              name={`correct-${i}`}
+                              checked={q.correctIndex === oi}
+                              onChange={() =>
+                                updateQuestion(i, { correctIndex: oi })
+                              }
+                              className="w-4 h-4"
+                            />
+                            <span className="text-blue-600 font-medium">Correct</span>
+                          </label>
+                        </div>
+                        {/* Remove option button for mobile - only show if more than 2 options */}
+                        {q.options.length > 2 && (
+                          <button
+                            onClick={() => {
+                              const opts = q.options.filter((_, idx) => idx !== oi);
+                              updateQuestion(i, { options: opts });
+                              // Adjust correct index if needed
+                              if (q.correctIndex === oi) {
+                                updateQuestion(i, { correctIndex: 0 });
+                              } else if (q.correctIndex > oi) {
+                                updateQuestion(i, { correctIndex: q.correctIndex - 1 });
+                              }
+                            }}
+                            className="w-full sm:w-auto px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
+                          >
+                            Remove Option
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
                   <button
-                    className="px-3 py-1 bg-gray-200 rounded-lg"
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm w-full sm:w-auto"
                     onClick={() =>
                       updateQuestion(i, { options: [...q.options, ""] })
                     }
                   >
                     Add Option
                   </button>
-                  <input
-                    type="number"
-                    value={q.marks}
-                    onChange={(e) =>
-                      updateQuestion(i, {
-                        marks: parseFloat(e.target.value || 1),
-                      })
-                    }
-                    className="w-20 p-2 border rounded-lg"
-                    placeholder="Marks"
-                  />
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium whitespace-nowrap">Marks:</label>
+                    <input
+                      type="number"
+                      value={q.marks}
+                      onChange={(e) =>
+                        updateQuestion(i, {
+                          marks: parseFloat(e.target.value || 1),
+                        })
+                      }
+                      className="w-16 p-2 border rounded-lg text-center"
+                      placeholder="1"
+                      min="1"
+                      max="10"
+                    />
+                  </div>
                   <button
-                    className="ml-auto text-red-600 hover:text-red-800"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm w-full sm:w-auto sm:ml-auto"
                     onClick={() => removeQuestion(i)}
                   >
-                    Remove
+                    Remove Question
                   </button>
                 </div>
               </div>

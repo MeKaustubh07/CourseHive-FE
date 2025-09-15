@@ -1,0 +1,432 @@
+
+
+/* =========================
+   Global Reset & Base Styles
+   ========================= */
+   .legacy * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .legacy , 
+  .legacy .html {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+  
+  /* =========================
+     Topbar (Global)
+     ========================= */
+  .legacy .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    color: black;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1000;
+  }
+  
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
+  
+  .middle-section {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+  }
+  
+  .desktop-nav {
+    transform: translateX(-300px);
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Mobile Menu Button */
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  .mobile-menu-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Mobile Menu Drawer */
+  .mobile-menu-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 85vw;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    animation: slideInRight 0.3s ease;
+  }
+
+  .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .mobile-menu-content {
+    padding: 20px;
+  }
+
+  .mobile-menu-section {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 16px;
+  }
+
+  .mobile-menu-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+    text-transform: capitalize;
+  }
+
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mobile-menu-link {
+    display: block;
+    padding: 12px 16px;
+    color: #666;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .mobile-menu-link:hover {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+
+  .mobile-menu-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideInRight {
+    from { 
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to { 
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Logo */
+  .logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 7px;
+  }
+  
+  /* Nav Links */
+  .link {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000;
+  }
+  
+  /* Login Button */
+  .login-btn {
+    margin-left: 15px;
+    padding: 6px 12px;
+    background-color: #F5F5F5;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+  }
+  .login-btn:hover {
+    background-color: #EDEDED;
+  }
+  
+  /* Phone Icon */
+  .right-section .phone-icon {
+    color: black !important;
+    margin-top: 3px;
+    cursor: pointer !important;
+    transition: color 0.2s ease-in-out;
+  }
+  .right-section .phone-icon:hover {
+    color: red !important;
+  }
+  
+  /* =========================
+     Auth Pages (Login / Signup)
+     ========================= */
+  .auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f7;
+  }
+  
+  .auth-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    width: 350px;
+    max-width: 90vw;
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .auth-box h2 {
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #1d1d1f;
+  }
+  
+  .auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .auth-box input:focus {
+    border-color: #0071e3;
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.2);
+    outline: none;
+  }
+  
+  .auth-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .auth-box button:hover {
+    background-color: #e5e5e5;
+  }
+  
+  /* Auth Links */
+  .auth-box .links {
+    margin-top: 15px;
+  }
+  .auth-box .links a {
+    color: #0071e3;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .auth-box .links a:hover {
+    text-decoration: underline;
+  }
+
+  /* =========================
+     Responsive Design
+     ========================= */
+  
+  /* Tablet and Mobile */
+  @media (max-width: 768px) {
+    .legacy .topbar {
+      padding: 10px 15px;
+      height: 60px;
+    }
+
+    .left-section {
+      gap: 15px;
+    }
+
+    .middle-section.desktop-nav {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .mobile-menu-overlay {
+      display: block;
+    }
+
+    .right-section {
+      gap: 10px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+    }
+
+    .login-btn {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    /* Auth responsive for tablets */
+    .auth-box {
+      width: 340px;
+      padding: 35px 30px;
+    }
+  }
+
+  /* Mobile Only */
+  @media (max-width: 480px) {
+    .legacy .topbar {
+      padding: 8px 12px;
+    }
+
+    .left-section {
+      gap: 10px;
+    }
+
+    .right-section {
+      gap: 8px;
+    }
+
+    .logo {
+      width: 35px;
+      height: 35px;
+    }
+
+    .login-btn {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+
+    .mobile-menu-drawer {
+      width: 280px;
+    }
+
+    .mobile-menu-content {
+      padding: 16px;
+    }
+
+    .mobile-menu-title {
+      font-size: 16px;
+    }
+
+    .mobile-menu-link {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    /* Auth responsive */
+    .auth-box {
+      width: 320px;
+      padding: 30px 25px;
+      margin: 15px;
+    }
+
+    .auth-box h2 {
+      font-size: 1.3rem;
+    }
+
+    .auth-box input {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    .auth-box button {
+      padding: 10px;
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Desktop and larger */
+  @media (min-width: 769px) {
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    .mobile-menu-overlay {
+      display: none !important;
+    }
+
+    .middle-section.desktop-nav {
+      display: flex;
+    }
+  }

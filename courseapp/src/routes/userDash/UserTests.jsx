@@ -2,16 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../lib/api";
 
-/**
- * Unified user test component:
- * - list published tests
- * - start an attempt (from list or via :testId route param)
- * - attempt view (timer + progress + questions)
- * - auto-submit on expiry and manual submit
- * - result view
- *
- * Background/wrapper uses the gradient overlay you provided.
- */
 
 export default function UserAttempt() {
   const { testId: routeTestId } = useParams(); // optional param to auto-start
@@ -294,14 +284,13 @@ export default function UserAttempt() {
       <BackgroundWrapper>
         <div className="max-w-5xl mx-auto p-8">
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold">Available Tests</h1>
-              <p className="text-gray-600 mt-1">Attempt published tests and see your results instantly.</p>
-            </div>
-            <div>
-              <button onClick={() => fetchTests()} className="px-4 py-2 bg-white/60 backdrop-blur border border-gray-200 rounded shadow">Refresh</button>
-            </div>
+            <span>
+              <h6 className="text-3xl font-bold">Available Tests</h6>
+            </span>
           </div>
+          <div className="mb-6 flex justify-end">
+           <button onClick={fetchTests} className="px-4 py-2 border rounded hover:bg-gray-50">Refresh</button>
+           </div>
 
           {tests.length === 0 ? (
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow border border-gray-100/60 text-center">

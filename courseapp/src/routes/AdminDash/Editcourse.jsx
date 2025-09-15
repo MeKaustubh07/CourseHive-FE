@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../lib/api";
 import { useNavigate } from "react-router-dom";
 
 // 🔹 Token validation helper
@@ -34,7 +34,7 @@ export default function MyCourses() {
     if (!headers) return setLoading(false);
 
     try {
-      const res = await axios.get("http://localhost:3000/api/admin/mycourses", {
+      const res = await api.get("/api/admin/mycourses", {
         headers,
       });
 
@@ -84,8 +84,8 @@ export default function MyCourses() {
 
       console.log("📤 Update payload:", payload);
 
-      const response = await axios.put(
-        "http://localhost:3000/api/admin/editcourse",
+      const response = await api.put(
+        "/api/admin/editcourse",
         payload,
         { headers }
       );
@@ -118,8 +118,8 @@ export default function MyCourses() {
     try {
       console.log("🗑️ Deleting course with ID:", id);
 
-      const response = await axios.delete(
-        "http://localhost:3000/api/admin/deletecourse",
+      const response = await api.delete(
+        "/api/admin/deletecourse",
         {
           headers,
           data: { courseId: id },
@@ -165,27 +165,24 @@ export default function MyCourses() {
         }}
       />
 
-      {/* Main Content */}
-      <div className="relative z-10 p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-center text-gray-900 mb-10">
-      Question Papers
-      </h1>
+        {/* Main Content */}
+        <div className="relative z-10 p-4 sm:p-6 max-w-7xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-10">
+        Manage Courses
+        </h1>
 
-        {loading && <p className="text-gray-600">⏳ Loading courses...</p>}
-        {!loading && courses.length === 0 && (
-          <p className="text-gray-600">No courses found.</p>
-        )}
-
-        {/* Courses Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((c) => (
+          {loading && <p className="text-gray-600 text-center">⏳ Loading courses...</p>}
+          {!loading && courses.length === 0 && (
+            <p className="text-gray-600 text-center">No courses found.</p>
+          )}        {/* Courses Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">{courses.map((c) => (
             <div
               key={c._id}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col"
+              className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex flex-col"
             >
               {/* Thumbnail */}
               <div
-                className="w-full h-48 mb-4 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer"
+                className="w-full h-40 sm:h-48 mb-4 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer group"
                 onClick={() => {
                   if (c.videoUrl) window.open(c.videoUrl, "_blank");
                 }}
@@ -195,40 +192,40 @@ export default function MyCourses() {
                   <img
                     src={c.thumbnailUrl}
                     alt={c.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
                       e.currentTarget.style.display = "none";
                       e.currentTarget.parentElement.innerHTML =
-                        '<span class="text-gray-400">❌ Image load failed</span>';
+                        '<span class="text-gray-400 text-sm">❌ Image failed to load</span>';
                     }}
                   />
                 ) : (
-                  <span className="text-gray-400">📷 No Image</span>
+                  <span className="text-gray-400 text-sm">📷 No Image</span>
                 )}
               </div>
 
-              <h2 className="font-semibold text-lg text-gray-900 line-clamp-2">
+              <h2 className="font-semibold text-base sm:text-lg text-gray-900 line-clamp-2 mb-2">
                 {c.title}
               </h2>
-              <p className="text-gray-600 text-sm mt-1 line-clamp-2">
-                {c.description}
+              <p className="text-gray-600 text-sm mt-1 line-clamp-3 flex-grow">
+                {c.description || "No description available"}
               </p>
-              <p className="text-blue-600 font-bold mt-2">
+              <p className="text-blue-600 font-bold mt-3 text-lg">
                 {c.price > 0 ? `₹${c.price}` : "Free"}
               </p>
 
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex flex-col sm:flex-row gap-2 mt-4">
                 <button
                   onClick={() => setEditingCourse({ ...c })}
-                  className="bg-blue-500 text-white px-4 py-1 rounded-lg hover:bg-blue-600"
+                  className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium text-sm"
                 >
-                  Edit
+                 Edit
                 </button>
                 <button
                   onClick={() => deleteCourse(c._id)}
-                  className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600"
+                  className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium text-sm"
                 >
-                  Delete
+                 Delete
                 </button>
               </div>
             </div>
@@ -237,8 +234,133 @@ export default function MyCourses() {
 
         {/* Edit Modal */}
         {editingCourse && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-20">
-            {/* --- Your existing edit modal code remains unchanged --- */}
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Edit Course</h2>
+                  <button
+                    onClick={() => setEditingCourse(null)}
+                    className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Course Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Course Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={editingCourse.title}
+                      onChange={(e) =>
+                        setEditingCourse({ ...editingCourse, title: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter course title"
+                      required
+                    />
+                  </div>
+
+                  {/* Course Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      value={editingCourse.description}
+                      onChange={(e) =>
+                        setEditingCourse({ ...editingCourse, description: e.target.value })
+                      }
+                      rows={4}
+                      className="w-full border border-gray-300 rounded-lg p-3 text-base resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter course description"
+                    />
+                  </div>
+
+                  {/* Course Price */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Price (₹)
+                    </label>
+                    <input
+                      type="number"
+                      value={editingCourse.price}
+                      onChange={(e) =>
+                        setEditingCourse({ ...editingCourse, price: e.target.value })
+                      }
+                      min="0"
+                      step="1"
+                      className="w-full border border-gray-300 rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter price (0 for free)"
+                    />
+                  </div>
+
+                  {/* Thumbnail URL */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Thumbnail URL
+                    </label>
+                    <input
+                      type="url"
+                      value={editingCourse.thumbnailUrl}
+                      onChange={(e) =>
+                        setEditingCourse({ ...editingCourse, thumbnailUrl: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter thumbnail image URL"
+                    />
+                    {editingCourse.thumbnailUrl && (
+                      <div className="mt-2">
+                        <img
+                          src={editingCourse.thumbnailUrl}
+                          alt="Thumbnail preview"
+                          className="w-20 h-20 object-cover rounded-lg border"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Video URL */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Video URL
+                    </label>
+                    <input
+                      type="url"
+                      value={editingCourse.videoUrl}
+                      onChange={(e) =>
+                        setEditingCourse({ ...editingCourse, videoUrl: e.target.value })
+                      }
+                      className="w-full border border-gray-300 rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter video URL"
+                    />
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                  <button
+                    onClick={() => setEditingCourse(null)}
+                    className="flex-1 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={updateCourse}
+                    className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Update Course
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

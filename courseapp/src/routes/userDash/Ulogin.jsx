@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
 import { userLoginEmailAtom, userLoginPasswordAtom } from "../../store/userAtoms";
 import AuthLayout from "../../Components/AuthLayout";
+import GoogleAuth from "../../Components/GoogleAuth";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../lib/api";
@@ -63,6 +64,60 @@ export default function UserLogin() {
         }
     };
 
+    const handleGoogleAuth = async (googleUser, credential) => {
+        try {
+            setLoading(true);
+            setMsg("");
+
+            // Send Google auth data to backend for user login
+            const response = await api.post("/api/user/google-auth", {
+                googleUser,
+                credential,
+                mode: 'login'
+            });
+
+            if (response.data?.success) {
+                if (response.data.user) {
+                    const userData = {
+                        firstName: response.data.user.firstName,
+                        lastName: response.data.user.lastName,
+                        email: response.data.user.email,
+                        profilePicture: response.data.user.profilePicture
+                    };
+
+                    // Clear any admin session first
+                    localStorage.removeItem("admin_token");
+                    localStorage.removeItem("admin_user");
+
+                    localStorage.setItem("user_user", JSON.stringify(userData));
+                    // notify Topbar
+                    window.dispatchEvent(new Event("sessionUpdate"));
+                }
+
+                if (response.data.token) {
+                    localStorage.setItem("user_token", response.data.token);
+                }
+
+                setMsg("Google signin successful! Welcome to EduPortal!");
+                setEmail("");
+                setPassword("");
+                setTimeout(() => navigate("/"), 1000);
+            } else {
+                setMsg(response.data?.message || "Google signin failed");
+            }
+        } catch (err) {
+            console.error("Google login error:", err);
+            setMsg(err.response?.data?.message || err.message || "Google signin failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleError = (error) => {
+        console.error("Google Auth Error:", error);
+        setMsg("Google authentication failed. Please try again.");
+    };
+
     return (
         <AuthLayout title="User Login">
                 <input
@@ -80,6 +135,14 @@ export default function UserLogin() {
                 <button onClick={handleLogin} disabled={loading}>
                     {loading ? "Logging in..." : "Login"}
                 </button>
+
+                {/* Google Auth */}
+                <GoogleAuth 
+                    onSuccess={handleGoogleAuth}
+                    onError={handleGoogleError}
+                    userType="user"
+                    mode="login"
+                />
                 <div className="links">
                     <Link to="/user/signup">Sign up </Link> |
                     <Link to="/admin/signup"> Start as Admin</Link>

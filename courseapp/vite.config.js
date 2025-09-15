@@ -19,7 +19,7 @@ export default defineConfig({
     port: 5173,        // 👈 optional, but makes sure it’s consistent
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://coursehive-kmp.onrender.com",
         changeOrigin: true,
         secure: false,
       },
