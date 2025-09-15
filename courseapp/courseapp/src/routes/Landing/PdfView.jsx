@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../Components/ui/button";
 
 const PDFViewer = () => {
   const { id } = useParams();
