@@ -15,13 +15,13 @@ export default defineConfig({
     },
   },
   server: {
-    host: "0.0.0.0",   // 👈 Allow external devices (like your phone) to connect
-    port: 5173,        // 👈 optional, but makes sure it’s consistent
+    host: "0.0.0.0",
+    port: 5174,
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://coursehive-kmp.onrender.com",
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },
