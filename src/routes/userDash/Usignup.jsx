@@ -78,12 +78,18 @@ export default function UserSignup() {
       setLoading(true);
       setMsg("");
 
+      console.log('🚀 Starting Google Auth for signup...');
+      console.log('📍 Current Origin:', window.location.origin);
+      console.log('👤 Google User:', googleUser);
+
       // Send Google auth data to backend for user signup
       const response = await api.post("/api/user/google-auth", {
         googleUser,
         credential,
         mode: 'signup'
       });
+
+      console.log('📡 Backend Response:', response.data);
 
       if (response.data?.success) {
         if (response.data.user) {
@@ -114,19 +120,43 @@ export default function UserSignup() {
         setPassword("");
         setTimeout(() => navigate("/"), 1000);
       } else {
-        setMsg(response.data?.message || "Google signup failed");
+        console.error('❌ Backend returned success=false:', response.data);
+        setMsg(response.data?.message || "Google signup failed - Backend error");
       }
     } catch (err) {
-      console.error("Google signup error:", err);
-      setMsg(err.response?.data?.message || "Google signup failed");
+      console.error("❌ Google signup error:", err);
+      console.error("📡 Error response:", err.response?.data);
+      console.error("🌐 Request details:", {
+        origin: window.location.origin,
+        url: err.config?.url,
+        method: err.config?.method
+      });
+      
+      let errorMessage = "Google signup failed";
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = `Google signup failed: ${err.message}`;
+      }
+      
+      setMsg(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = (error) => {
-    console.error("Google Auth Error:", error);
-    setMsg("Google authentication failed. Please try again.");
+    console.error("❌ Google Auth Error:", error);
+    console.error("📍 Current Origin:", window.location.origin);
+    
+    let errorMessage = "Google authentication failed";
+    if (error?.type === 'initialization_error') {
+      errorMessage = `OAuth Config Error: Origin ${error.origin} may not be authorized`;
+    } else if (error?.error) {
+      errorMessage = `Google Auth Error: ${error.error}`;
+    }
+    
+    setMsg(`${errorMessage}. Please check console for details.`);
   };
 
   return (
