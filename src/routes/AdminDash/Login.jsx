@@ -53,16 +53,19 @@ export default function Login() {
           };
           localStorage.setItem("admin_user", JSON.stringify(adminData));
           console.log("✅ Admin data stored:", adminData);
+          console.log("🔐 Admin token stored:", res.data.token ? "✅ Yes" : "❌ No");
+          console.log("📦 Admin data stored in localStorage:", JSON.stringify(adminData));
   
           // notify Topbar (or any listener)
+          console.log("🔔 Dispatching sessionUpdate event");
           window.dispatchEvent(new Event("sessionUpdate"));
         }
   
-        setMsg("Signin successful! Welcome to EduPortal!");
+        setMsg("Signin successful! Welcome to Admin Portal!");
         setEmail("");
         setPassword("");
   
-        setTimeout(() => navigate("/"), 1000);
+        setTimeout(() => navigate("/admin/mycourses"), 1000);
       } else {
         setMsg(res.data?.message || "Login failed");
       }
@@ -105,13 +108,16 @@ export default function Login() {
           };
           localStorage.setItem("admin_user", JSON.stringify(adminData));
           console.log("✅ Admin Google auth successful:", adminData);
+          console.log("🔐 Admin token stored:", response.data.token ? "✅ Yes" : "❌ No");
+          console.log("📦 Admin data stored in localStorage:", JSON.stringify(adminData));
 
           // notify Topbar
+          console.log("🔔 Dispatching sessionUpdate event");
           window.dispatchEvent(new Event("sessionUpdate"));
         }
 
-        setMsg("Google signin successful! Welcome to EduPortal!");
-        setTimeout(() => navigate("/"), 1000);
+        setMsg("Google signin successful! Welcome to Admin Portal!");
+        setTimeout(() => navigate("/admin/mycourses"), 1000);
       } else {
         setMsg(response.data?.message || "Google signin failed");
       }

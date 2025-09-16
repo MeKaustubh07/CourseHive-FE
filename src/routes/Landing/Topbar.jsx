@@ -19,13 +19,29 @@ export default function Topbar() {
       try {
         const userStr = localStorage.getItem("user_user");
         const adminStr = localStorage.getItem("admin_user");
+        const userToken = localStorage.getItem("user_token");
+        const adminToken = localStorage.getItem("admin_token");
+
+        // Debug logging
+        console.log("🔍 TopBar Session Check:");
+        console.log("  User data:", userStr);
+        console.log("  Admin data:", adminStr);
+        console.log("  User token:", userToken ? "✅ Present" : "❌ Missing");
+        console.log("  Admin token:", adminToken ? "✅ Present" : "❌ Missing");
 
         const user = userStr ? JSON.parse(userStr) : null;
         const admin = adminStr ? JSON.parse(adminStr) : null;
 
-        if (user) setSession({ type: "user", data: user });
-        else if (admin) setSession({ type: "admin", data: admin });
-        else setSession(null);
+        if (admin && adminToken) {
+          console.log("🔐 Setting admin session:", admin);
+          setSession({ type: "admin", data: admin });
+        } else if (user && userToken) {
+          console.log("👤 Setting user session:", user);
+          setSession({ type: "user", data: user });
+        } else {
+          console.log("❌ No valid session found");
+          setSession(null);
+        }
       } catch (error) {
         console.error("Error parsing session data:", error);
         setSession(null);
@@ -33,7 +49,10 @@ export default function Topbar() {
     };
 
     checkSession();
-    const handleUpdate = () => checkSession();
+    const handleUpdate = () => {
+      console.log("🔄 Session update event triggered");
+      checkSession();
+    };
 
     window.addEventListener("sessionUpdate", handleUpdate);
     return () => {

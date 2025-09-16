@@ -46,9 +46,9 @@ export default function AdminSignup() {
         // ✅ tell Topbar to refresh
         window.dispatchEvent(new Event("sessionUpdate"));
 
-        setMsg("Signup successful! Welcome to EduPortal!");
+        setMsg("Signup successful! Welcome to Admin Portal!");
         setFirstName(""); setLastName(""); setEmail(""); setPassword("");
-        setTimeout(() => navigate("/"), 400);
+        setTimeout(() => navigate("/admin/mycourses"), 400);
       } else {
         setMsg(res.data?.message || "Signup failed");
       }
@@ -94,9 +94,9 @@ export default function AdminSignup() {
         // Tell Topbar to refresh
         window.dispatchEvent(new Event("sessionUpdate"));
 
-        setMsg("Google signup successful! Welcome to EduPortal!");
+        setMsg("Google signup successful! Welcome to Admin Portal!");
         setFirstName(""); setLastName(""); setEmail(""); setPassword("");
-        setTimeout(() => navigate("/"), 400);
+        setTimeout(() => navigate("/admin/mycourses"), 400);
       } else {
         setMsg(response.data?.message || "Google signup failed");
       }
